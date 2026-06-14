@@ -10,13 +10,11 @@ type DataTableProps = {
 };
 
 export const DataTable = ({ data, year, columns }: DataTableProps) => {
-  const yearData = data.filter((d) => d.year === year);
+  const record = data.find((d) => d.year === year);
 
-  if (yearData.length === 0) {
+  if (!record) {
     return <div className={styles.noData}>No data available for year {year}</div>;
   }
-
-  const record = yearData[0];
 
   return (
     <table className={styles.table}>
