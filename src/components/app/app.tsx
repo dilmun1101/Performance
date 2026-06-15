@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { useCo2Data } from '../../hooks/useCo2Data';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { SearchBar } from '../search-bar/search-bar';
@@ -24,15 +24,11 @@ export const App = () => {
   ]);
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
 
-  const years = data ? getAvailableYears(data) : [];
-  const availableColumns = getAvailableColumns();
+  const years = useMemo(() => (data ? getAvailableYears(data) : []), [data]);
+  const availableColumns = useMemo(() => getAvailableColumns(), []);
 
-  const handleYearChange = useCallback((year: number) => {
-    setSelectedYear(year);
-  }, []);
-
-  const handleSortFieldChange = useCallback((field: 'name' | 'population') => {
-    setSortField(field);
+  const handleSortFieldChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortField(e.target.value as 'name' | 'population');
   }, []);
 
   const handleSortOrderToggle = useCallback(() => {
@@ -72,15 +68,11 @@ export const App = () => {
       {/* Controls */}
       <div className={styles.controls}>
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
-        <YearSelector year={selectedYear} years={years} onChange={handleYearChange} />
+        <YearSelector year={selectedYear} years={years} onChange={setSelectedYear} />
 
         <div className={styles.sortContainer}>
           <label className={styles.sortLabel}>Sort by:</label>
-          <select
-            value={sortField}
-            onChange={(e) => handleSortFieldChange(e.target.value as 'name' | 'population')}
-            className={styles.sortSelect}
-          >
+          <select value={sortField} onChange={handleSortFieldChange} className={styles.sortSelect}>
             <option value="population">Population</option>
             <option value="name">Name</option>
           </select>
