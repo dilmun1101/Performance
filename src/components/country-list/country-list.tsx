@@ -1,6 +1,7 @@
 import type { Country, YearData } from '../../types';
 import { CountryCard } from '../country-card/country-card';
 import { useMemo, memo } from 'react';
+import { Virtuoso } from 'react-virtuoso';
 
 import styles from './country-list.module.css';
 
@@ -53,16 +54,20 @@ export const CountryList = memo(
     }, [countries, searchQuery, sortField, sortOrder, selectedYear]);
 
     return (
-      <div className={styles.countryList}>
-        {filteredCountries.map(({ country, data }) => (
-          <CountryCard
-            key={country.id}
-            country={country}
-            selectedYear={selectedYear}
-            selectedColumns={selectedColumns}
-            data={data}
-          />
-        ))}
+      <div className={styles.countryList} style={{ height: '70dvh' }}>
+        <Virtuoso
+          style={{ height: '70dvh' }}
+          data={filteredCountries}
+          itemContent={(_, { country, data }) => (
+            <CountryCard
+              key={country.id}
+              country={country}
+              selectedYear={selectedYear}
+              selectedColumns={selectedColumns}
+              data={data}
+            />
+          )}
+        />
       </div>
     );
   }
