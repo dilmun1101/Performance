@@ -9,31 +9,10 @@ import { getAvailableYears, getAvailableColumns } from '../../utils/data-transfo
 
 import styles from './app.module.css';
 
-// type AppState = {
-//   searchQuery: string;
-//   selectedRegion: string;
-//   selectedYear: number;
-//   sortField: 'name' | 'population';
-//   sortOrder: 'asc' | 'desc';
-//   selectedColumns: string[];
-//   isColumnModalOpen: boolean;
-// };
-
 export const App = () => {
   const { data, isLoading, error } = useCo2Data();
 
-  // const [state, setState] = useState<AppState>({
-  //   searchQuery: '',
-  //   selectedRegion: '',
-  //   selectedYear: 2020,
-  //   sortField: 'population',
-  //   sortOrder: 'desc',
-  //   selectedColumns: ['year', 'population', 'co2', 'co2_per_capita'],
-  //   isColumnModalOpen: false,
-  // });
-
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedRegion] = useState('');
   const [selectedYear, setSelectedYear] = useState(2020);
   const [sortField, setSortField] = useState<'name' | 'population'>('population');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -47,10 +26,6 @@ export const App = () => {
 
   const years = data ? getAvailableYears(data) : [];
   const availableColumns = getAvailableColumns();
-
-  const handleSearch = useCallback((value: string) => {
-    setSearchQuery(value);
-  }, []);
 
   const handleYearChange = useCallback((year: number) => {
     setSelectedYear(year);
@@ -96,7 +71,7 @@ export const App = () => {
 
       {/* Controls */}
       <div className={styles.controls}>
-        <SearchBar value={searchQuery} onChange={handleSearch} />
+        <SearchBar value={searchQuery} onChange={setSearchQuery} />
         <YearSelector year={selectedYear} years={years} onChange={handleYearChange} />
 
         <div className={styles.sortContainer}>
@@ -127,11 +102,9 @@ export const App = () => {
         countries={data}
         searchQuery={searchQuery}
         selectedColumns={selectedColumns}
-        selectedRegion={selectedRegion}
         selectedYear={selectedYear}
         sortField={sortField}
         sortOrder={sortOrder}
-        onYearChange={handleYearChange}
       />
 
       {/* Column Modal */}
