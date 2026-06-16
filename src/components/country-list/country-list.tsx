@@ -39,7 +39,10 @@ export const CountryList = memo(
             population: data?.population ?? 0,
           };
         })
-        .filter(({ country }) => {
+        .filter(({ country, data }) => {
+          if (!data) {
+            return false;
+          }
           const matchesSearch = country.id.toLowerCase().includes(searchQuery.toLowerCase());
           return matchesSearch;
         })

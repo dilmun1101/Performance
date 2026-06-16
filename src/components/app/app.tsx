@@ -5,7 +5,8 @@ import { SearchBar } from '../search-bar/search-bar';
 import { YearSelector } from '../year-selector/year-selector';
 import { CountryList } from '../country-list/country-list';
 import { ColumnModal } from '../column-modal/column-modal';
-import { getAvailableYears, getAvailableColumns } from '../../utils/data-transformers';
+import { getAvailableYears } from '../../utils/data-transformers';
+import { AVAILABLE_COLUMNS } from '../constants/constants';
 
 import styles from './app.module.css';
 
@@ -25,7 +26,6 @@ export const App = () => {
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
 
   const years = useMemo(() => (data ? getAvailableYears(data) : []), [data]);
-  const availableColumns = useMemo(() => getAvailableColumns(), []);
 
   const handleSortFieldChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortField(e.target.value as 'name' | 'population');
@@ -102,7 +102,7 @@ export const App = () => {
       {/* Column Modal */}
       <ColumnModal
         isOpen={isColumnModalOpen}
-        availableColumns={availableColumns}
+        availableColumns={AVAILABLE_COLUMNS}
         selectedColumns={selectedColumns}
         onToggle={handleColumnToggle}
         onClose={handleModalToggle}
